@@ -10,9 +10,9 @@ membership_events = $stdin.readlines.each do |membership_event|
     when 'member-join'
       %x(/usr/local/bin/register_app_node.py #{event[:ipaddress]})
     when 'member-leave'
-      puts "Drain and remove node from load balancer"
+      %x(/usr/local/bin/unregister_app_node.py #{event[:ipaddress]})
     when 'member-failed'
-      puts "Drain and remove node from load balancer"
+      %x(/usr/local/bin/unregister_app_node.py #{event[:ipaddress]})
     end
   end
 end
