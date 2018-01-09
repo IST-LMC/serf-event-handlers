@@ -23,15 +23,17 @@ for membership_event in membership_events:
     event['instance_id'] = event_array[6]
   except:
     print("No Lifecycle Hook Info")
-
-  if event['role'] == 'app' and re.match('.*-as-app.*$', event['hostname']):
-    if event['state'] == 'member-join':
-      join.register(event['ipaddress'])
-    elif event['state'] == 'member-leave':
-      leave.unregister(event['ipaddress'])
-    elif event['state'] == 'member-failed':
-      leave.unregister(event['ipaddress'])
-    elif event['state'] == 'member-reap':
-      print("% reaped." % event['hostname'])
-  elif os.environ['SERF_USER_EVENT'] == 'drain':
-    leave.drain(event)
+  try:
+    if event['role'] == 'app' and re.match('.*-as-app.*$', event['hostname']):
+      if event['state'] == 'member-join':
+        join.register(event['ipaddress'])
+      elif event['state'] == 'member-leave':
+        leave.unregister(event['ipaddress'])
+      elif event['state'] == 'member-failed':
+        leave.unregister(event['ipaddress'])
+      elif event['state'] == 'member-reap':
+        print("%s was reaped." % event['hostname'])
+    elif os.environ['SERF_USER_EVENT'] == 'drain':
+      leave.drain(event)
+  except KeyError:
+    print("No event matches found")
