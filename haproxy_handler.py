@@ -33,6 +33,7 @@ for membership_event in membership_events:
         leave.unregister(event['ipaddress'])
       elif event['state'] == 'member-reap':
         print("%s was reaped." % event['hostname'])
+        leave.unregister(event['ipaddress'])
       elif os.environ['SERF_USER_EVENT'] == 'drain':
         leave.drain(event)
   except KeyError:
