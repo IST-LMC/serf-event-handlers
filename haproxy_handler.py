@@ -28,12 +28,12 @@ for membership_event in membership_events:
       if event['state'] == 'member-join':
         join.register(event['ipaddress'])
       elif event['state'] == 'member-leave':
-        leave.unregister(event['ipaddress'])
+        leave.unregister(event['ipaddress'], event['hostname'])
       elif event['state'] == 'member-failed':
-        leave.unregister(event['ipaddress'])
+        leave.unregister(event['ipaddress'], event['hostname'])
       elif event['state'] == 'member-reap':
         print("%s was reaped." % event['hostname'])
-        leave.unregister(event['ipaddress'])
+        leave.unregister(event['ipaddress'], event['hostname'])
       elif os.environ['SERF_USER_EVENT'] == 'drain':
         leave.drain(event)
   except KeyError:
